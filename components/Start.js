@@ -25,14 +25,6 @@ export default class Start extends React.Component {
     this.setState({ bgImage: img });
   };
 
-  // imgSwatches = {
-  //   black: black,
-  //   blue: blue,
-  //   pink: pink,
-  //   rainbow: rainbow,
-  //   abstract: abstract
-  // };
-
   render() {
     return (
       // <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
@@ -76,8 +68,6 @@ export default class Start extends React.Component {
                   accessibilityHint="Lets you choose a background for the chat screen"
                   accessibilityRole="button"
                   onPress={() => this.setBgImage(black)}
-                // onPress={() => this.setState({ bgColor: "#090C08" })}
-                // onPress={() => this.props.navigation.setOptions(this.setBgImage(black))}
                 >
                   {/* <View style={styles.blackSwatch}></View> */}
                   <View><Image style={styles.blackSwatch} source={black}></Image></View>

@@ -1,9 +1,13 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, Text, Button, ImageBackground, Image, Platform, KeyboardAvoidingView, LogBox, Alert } from 'react-native';
 import { Bubble, GiftedChat, SystemMessage, Day, InputToolbar, } from "react-native-gifted-chat";
+import CustomActions from "./CustomActions";
+import MapView from "react-native-maps";
 
-const firebase = require('firebase');
-require('firebase/firestore');
+// const firebase = require('firebase');
+// require('firebase/firestore');
+import firebase from "firebase";
+import "firebase/firestore";
 
 // Import AsyncStorage
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -37,6 +41,8 @@ export default class Chat extends React.Component {
         avatar: "",
       },
       isConnected: false,
+      location: null,
+      image: null,
     };
     // Initializes firebase
     if (!firebase.apps.length) {
@@ -72,9 +78,7 @@ export default class Chat extends React.Component {
     if (this.state.isConnected == false) {
     } else {
       return (
-        <InputToolbar
-          {...props}
-        />
+        <InputToolbar {...props} />
       );
     }
   }
@@ -156,6 +160,10 @@ export default class Chat extends React.Component {
         text: data.text || "",
         system: data.system,
         user: data.user,
+        image: data.image,
+        location: data.location,
+        // image: data.image || null,
+        // location: data.location || null,
       });
     });
     this.setState({ messages });
@@ -188,9 +196,15 @@ export default class Chat extends React.Component {
     this.refMessages.add({
       uid: this.state.uid,
       _id: msg._id,
-      text: msg.text,
+      // text: msg.text,
+      text: msg.text || "",
       createdAt: msg.createdAt,
       user: this.state.user,
+      // image: this.state.image,
+      // location: this.state.location,
+      image: msg.image || "",
+      // image: msg.image || null,
+      location: msg.location || null,
     });
   };
 
@@ -237,6 +251,33 @@ export default class Chat extends React.Component {
     return <Day {...props} textStyle={{ color: "#fff" }} />;
   }
 
+  // Renders the + button which opens up choices to upload/take photo, send location
+  renderCustomActions(props) {
+    return <CustomActions {...props} />;
+  }
+
+  // Renders a custom map view
+  renderCustomView(props) {
+    const { currentMessage } = props;
+    if (currentMessage.location) {
+      return (
+        <MapView
+          showsUserLocation={true}
+          style={{ width: 150, height: 100, borderRadius: 13, margin: 3 }}
+          region={{
+            // latitude: currentMessage.location.latitude,
+            // longitude: currentMessage.location.longitude,
+            latitude: parseInt(currentMessage.location.latitude),
+            longitude: parseInt(currentMessage.location.longitude),
+            latitudeDelta: 0.0922,
+            longitudeDelta: 0.0421,
+          }}
+        />
+      );
+    }
+    return null;
+  }
+
 
   render() {
     const { bgColor, bgImage } = this.props.route.params;
@@ -252,7 +293,11 @@ export default class Chat extends React.Component {
             renderSystemMessage={this.renderSystemMessage}
             renderDay={this.renderDay}
             renderInputToolbar={this.renderInputToolbar.bind(this)}
+            renderActions={this.renderCustomActions}
+            renderCustomView={this.renderCustomView}
             messages={this.state.messages}
+            renderUsernameOnMessage={true}
+            user={this.state.user}
             onSend={(messages) => this.onSend(messages)}
             user={{
               _id: this.state.user._id,
