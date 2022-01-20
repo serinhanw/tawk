@@ -2,7 +2,10 @@
 
 <p align="center">
 <img alt="Screenshot of Start page of tawk" src="https://github.com/serinhanw/tawk/blob/main/assets/screenshot.png" width="240" height="485">
+<img alt="Screenshot of Start page of tawk" src="https://github.com/serinhanw/tawk/blob/main/assets/screenshot1.png" width="240" height="485">
 </p>
+
+![tawk Demo](demo/notflixdb-demo.gif)
 
 # Overview
 Tawk is a chat app for mobile devices, developed using React Native. The app provides users with a chat interface and enables users to send text messages, share images, and even their location.
